@@ -1,0 +1,13 @@
+name: Test Release
+runs:
+  using: composite
+  steps:
+    - name: Test Release
+      shell: bash
+      run: |
+        if [ -f "~/.testcontainers.properties" ]; then
+          rm ~/.testcontainers.properties
+        fi
+        echo 'testcontainers.reuse.enable=true' > ~/.testcontainers.properties
+        ./mvnw --settings .mvn/release-settings.xml --no-transfer-progress --batch-mode clean install -DskipITs -DskipTests -Dspring-boot.build-image.skip=true
+        rm ~/.testcontainers.properties
